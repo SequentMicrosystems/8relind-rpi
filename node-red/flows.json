@@ -1,0 +1,1 @@
+[{"id":"e431a168.1a38b","type":"exec","z":"d542cd69.c077f","command":"8relind 0 write ","addpay":true,"append":"","useSpawn":"false","timer":"","oldrc":false,"name":"","x":950,"y":720,"wires":[[],[],[]]}]
