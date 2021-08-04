@@ -1,8 +1,8 @@
 module.exports = function(RED) {
     "use strict";
     var I2C = require("i2c-bus");
-    const DEFAULT_HW_ADD = 0x38;
-    const ALTERNATE_HW_ADD = 0x20;
+    const DEFAULT_HW_ADD = 0x20;
+    const ALTERNATE_HW_ADD = 0x38;
     const OUT_REG = 0x01;
     const CFG_REG = 0x03;
     const mask = new ArrayBuffer(8);
@@ -83,19 +83,32 @@ module.exports = function(RED) {
                     //node.log('First update direction');  
                 }
                 var relayVal = 0;    
-                relayVal = node.port.readByteSync(hwAdd, OUT_REG);
+                
                 //node.log('Relays ' + String(relayVal));
-                if(relay < 1){
-                  relay = 1;
+                if(relay < 0){
+                  relay = 0;
                 }
                 if(relay > 8){
                   relay = 8;
                 }
-                relay-= 1;//zero based
-                if (myPayload == null || myPayload == false || myPayload == 0 || myPayload == 'off') {
-                  relayVal &= ~mask[relay];
-                } else {
-                  relayVal |= mask[relay];
+                if(relay > 0)
+                {
+                  relayVal = node.port.readByteSync(hwAdd, OUT_REG);
+                  relay-= 1;//zero based
+                  if (myPayload == null || myPayload == false || myPayload == 0 || myPayload == 'off') {
+                    relayVal &= ~mask[relay];
+                  } else {
+                    relayVal |= mask[relay];
+                  }
+                }
+                else if(myPayload >= 0 && myPayload < 256)
+                {
+                  var i = 0; 
+                  for(i = 0; i<8; i++){
+                    if(( (1 << i) & myPayload) != 0){
+                        relayVal |= mask[i];
+                    }                   
+                  }
                 }
                 node.port.writeByte(hwAdd, OUT_REG, relayVal,  function(err) {
                     if (err) { node.error(err, msg);
@@ -184,23 +197,37 @@ module.exports = function(RED) {
                 }
                 var relayVal = 0;    
                 relayVal = node.port.readByteSync(hwAdd, OUT_REG);
-                if(relay < 1){
-                  relay = 1;
+                if(relay < 0){
+                  relay = 0;
                 }
                 if(relay > 8){
                   relay = 8;
                 }
-                relay-= 1;//zero based
-                if(relayVal & mask[relay])
-                {
-                  msg.payload = 1;
+                if(relay > 0){
+                  relay-= 1;//zero based
+                  if(relayVal & mask[relay])
+                  {
+                    msg.payload = 1;
+                  }
+                  else
+                  {
+                    msg.payload = 0;
+                  }
                 }
-                else
-                {
-                  msg.payload = 0;
-                }
-                node.send(msg);
-               
+                else {
+                  var i;
+                  var outVal;
+                  outVal = 0;
+                  for(i = 0; i< 8; i++)
+                  {
+                    if( relayVal & mask[i])
+                    {
+                      outVal += 1 << i;
+                    }
+                  }
+                  msg.payload = outVal;                 
+                }               
+                node.send(msg);               
             } catch(err) {
                 this.error(err,msg);
             }
