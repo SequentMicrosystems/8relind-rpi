@@ -26,8 +26,13 @@ In order to see the node in the palette and use-it you need to restart node-red.
 
 ## Usage
 
-After install and restart the node-red you will see on the node palete, under Sequent Microsystems category the "8relind" node.This node will turn on or off a relay. 
-The card stack level and relay number can be set in the dialog screen or dinamicaly thru ``` msg.stack``` and ``` msg.relay ```. The output of the relay can be set dynamically as a boolean using msg.payload.
+After install and restart the node-red you will see on the node palete, under Sequent Microsystems category the "8relind" and "8relindrd" nodes.
+
+### 8relind node
+This node will turn on or off a relay or all relays as a 8 bits bitmap. The card stack level and relay number can be set in the dialog screen or dinamicaly thru ``` msg.stack``` and ``` msg.relay ```. The output of one relay or all 8 relays if you set the the relay number to 0, can be set dynamically using  ``` msg.payload ```.
+
+### 8relindrd node
+Thi node will read one relay state or all relays states as a 8 bits bitmap. The card stack level and relay number can be set in the dialog screen or dinamicaly thru ``` msg.stack``` and ``` msg.relay ``` and the state is output as  ``` msg.payload ``` .If you set the relay number to 0 the node will output the state of all relays.
 
 ## Important note
 
