@@ -21,9 +21,10 @@
  
 <script type="text/html" data-help-name="8relind">
     <p>Provides a connection to an Sequent Microsystems 8-Relays card.</p>
-    <p>Set one relay from 8 with the value received in <code>msg.payload</code> if <code>channel</code> is [1..8] or all relays if <code>channel</code> is 0  </p>
+    <p>Set one relay from 8 with the value received in <code>msg.payload</code> if <code>relay</code> is [1..8] or all relays if <code>relay</code> is 0  </p>
     <p>You can specify the card stack level in the edit dialog box or programaticaly with the input message <code>msg.stack</code></p>
     <p>You can specify the relay number in the edit dialog box or programaticaly with the input message <code>msg.relay</code></p>
+    <p>The state / states are set by input <code>msg.payload</code></p>
 </script>
 
 <script type="text/javascript">
