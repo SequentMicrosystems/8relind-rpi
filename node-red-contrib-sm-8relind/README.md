@@ -4,7 +4,7 @@ This is the node-red node to control Sequent Microsystems [8-RELAYS Stackable Ca
 
 ## Manual Install
 
-Clone or update the repository, follow the instrutions fron the [first page.](https://github.com/SequentMicrosystems/8relind-rpi)
+Clone or update the repository, follow the instructions from the [first page.](https://github.com/SequentMicrosystems/8relind-rpi)
 
 In your node-red user directory, tipicaly ~/.node-red,
 
@@ -37,4 +37,4 @@ Thi node will read one relay state or all relays states as a 8 bits bitmap. The 
 ## Important note
 
 This node is using the I2C-bus package from @fivdi, you can visit his work on github [here](https://github.com/fivdi/i2c-bus). 
-The inspiration for this node came from @nielsnl68 work with [node-red-contrib-i2c](https://github.com/nielsnl68/node-red-contrib-i2c).Thank both for the great job.
+The inspiration for this node came from @nielsnl68 work with [node-red-contrib-i2c](https://github.com/nielsnl68/node-red-contrib-i2c).We thank them for the great job.
