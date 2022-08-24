@@ -2,6 +2,8 @@
 
 This is an irrigation system created with Sequent Microsystems [Eight RELAYS 8-Layer Stackable HAT for Raspberry Pi](https://sequentmicrosystems.com/collections/industrial-automation/products/8-relays-stackable-card-for-raspberry-pi)
 
+Open in new tab  <a href="https://sequentmicrosystems.com/collections/industrial-automation/products/8-relays-stackable-card-for-raspberry-pi" target="_blank">Eight RELAYS 8-Layer Stackable HAT for Raspberry Pi</a>
+
 ## Installing the software
 
 * Install NodeRed folloing the instructions from [here](https://help.ubidots.com/en/articles/1958375-how-to-install-node-red-in-raspberry-pi).
