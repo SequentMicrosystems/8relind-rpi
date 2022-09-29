@@ -10,9 +10,9 @@ This is an 64 stations irrigation system created with Sequent Microsystems [Eigh
 
 * Connect up to 8 [Eight RELAYS Cards](https://sequentmicrosystems.com/collections/industrial-automation/products/8-relays-stackable-card-for-raspberry-pi) to your raspberry, each with different stack level jumper settings.  
 
-* Install the node for [Eight RELAYS Card](https://sequentmicrosystems.com/collections/industrial-automation/products/8-relays-stackable-card-for-raspberry-pi) by opening Node-RED interface in a browser: Go to Menu > Manage pallete > Install and search for node-red-contrib-sm-8relind, install the node and restart the NodeRED
+* Install the node for [Eight RELAYS Card](https://sequentmicrosystems.com/collections/industrial-automation/products/8-relays-stackable-card-for-raspberry-pi) by opening the Node-RED interface in a browser: Go to Menu > Manage pallete > Install and search for node-red-contrib-sm-8relind, install the node and restart the Node-RED
 
-* Import the Sprinkler controller flow: Go to Menu > Import > select a file to import. Load the provided [flows.json](https://github.com/SequentMicrosystems/8relind-rpi/blob/main/node-red/Sprinklers/flows.json) file and click Import button.
+* Import the Sprinkler controller flow: Go to Menu > Import > select a file to import. Load the provided [flows.json](https://github.com/SequentMicrosystems/8relind-rpi/blob/main/node-red/Sprinklers/flows.json) file and click the Import button.
 ![import](Pic/Import1.jpg)
 
 * Click on the top rigt ```Deploy``` button.
