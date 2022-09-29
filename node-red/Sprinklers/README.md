@@ -21,7 +21,7 @@ This is an 64 stations irrigation system created with Sequent Microsystems [Eigh
 ![Settings](Pic/Settings2.jpg)
 
 * Setup the weather and operating mode:
-![Settings1](Pic/Settings1.jpg)
+![Settings1](Pic/Settings1_1.jpg)
 
 * Enable each channel per day of the week from the Stations tab. The software detects how many card you connected and create a page for each card.
 ![Stations1-8](Pic/Stations1-8.jpg)
