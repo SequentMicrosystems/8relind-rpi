@@ -1,12 +1,12 @@
 # Sprinklers 
 
-This is an irrigation system created with Sequent Microsystems [Eight RELAYS 8-Layer Stackable HAT for Raspberry Pi](https://sequentmicrosystems.com/collections/industrial-automation/products/8-relays-stackable-card-for-raspberry-pi)
+This is an 64 stations irrigation system created with Sequent Microsystems [Eight RELAYS 8-Layer Stackable HAT for Raspberry Pi](https://sequentmicrosystems.com/collections/industrial-automation/products/8-relays-stackable-card-for-raspberry-pi)
 
 ## Installing the software
 
-* Install NodeRed folloing the instructions from [here](https://help.ubidots.com/en/articles/1958375-how-to-install-node-red-in-raspberry-pi).
+* Install NodeRed following the instructions from [HERE](https://help.ubidots.com/en/articles/1958375-how-to-install-node-red-in-raspberry-pi).
 
-* Enable I2C communication running ```sudo raspi-config```
+* Run ```sudo raspi-config``` and enable I2C communication.
 
 * Connect up to 8 [cards](https://sequentmicrosystems.com/collections/industrial-automation/products/8-relays-stackable-card-for-raspberry-pi) to your raspberry, ech with different stack level jumper settings.  
 
