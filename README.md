@@ -4,7 +4,7 @@
 
 [![relay8-rpi](readmeres/8-RELIND.jpg)](https://www.sequentmicrosystems.com)
 
-This is the command line and python functions to control the [8-RELAYS Stackable Card for Raspberry Pi](https://sequentmicrosystems.com/collections/all-io-cards/products/raspberry-pi-relays-stackable-card) Ver. 4.If you use Ver 3.x download from [here](https://github.com/SequentMicrosystems/8relay-rpi). If you have Ver. 1-2 with screw-type connectors download from [here](https://github.com/SequentMicrosystems/relay8-rpi).
+This is the command line and python functions to control the [8-RELAYS Stackable Card for Raspberry Pi](https://sequentmicrosystems.com/collections/industrial-automation/products/8-relays-stackable-card-for-raspberry-pi) Ver. 4.If you use Ver 3.x download from [here](https://github.com/SequentMicrosystems/8relay-rpi). If you have Ver. 1-2 with screw-type connectors download from [here](https://github.com/SequentMicrosystems/relay8-rpi).
 
 Don't forget to enable I2C communication:
 ```bash
