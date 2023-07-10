@@ -29,6 +29,7 @@ If you clone the repository any update can be made with the following commands:
 ```bash
 ~$ cd 8relind-rpi/  
 ~/8relind-rpi$ git pull
+~/8relind-rpi$ sudo make
 ~/8relind-rpi$ sudo make install
 ```  
 
