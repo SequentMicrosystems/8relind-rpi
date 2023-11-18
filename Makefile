@@ -35,7 +35,7 @@ install: 8relind
 	$Q echo "[Install]"
 	$Q cp 8relind		$(DESTDIR)$(PREFIX)/bin
 ifneq ($(WIRINGPI_SUID),0)
-	$Q chown root.root	$(DESTDIR)$(PREFIX)/bin/8relind
+	$Q chown root:root	$(DESTDIR)$(PREFIX)/bin/8relind
 	$Q chmod 4755		$(DESTDIR)$(PREFIX)/bin/8relind
 endif
 #	$Q mkdir -p		$(DESTDIR)$(PREFIX)/man/man1
