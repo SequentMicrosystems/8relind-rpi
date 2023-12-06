@@ -1,6 +1,6 @@
-import smbus
+import smbus2
 
-# bus = smbus.SMBus(1)    # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1)
+# bus = smbus2.SMBus(1)    # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1)
 
 DEVICE_ADDRESS = 0x38  # 7 bit address (will be left shifted to add the read write bit)
 ALTERNATE_DEVICE_ADDRESS = 0x20  # 7 bit address (will be left shifted to add the read write bit)
@@ -46,7 +46,7 @@ def set(stack, relay, value):
         raise ValueError('Invalid relay number!')
     if relay > 8:
         raise ValueError('Invalid relay number!')
-    bus = smbus.SMBus(1)
+    bus = smbus2.SMBus(1)
     hwAdd = DEVICE_ADDRESS + stack
     try:
         oldVal = __check(bus, hwAdd)
@@ -82,7 +82,7 @@ def set_all(stack, value):
     if value < 0:
         raise ValueError('Invalid relay value!')
 
-    bus = smbus.SMBus(1)
+    bus = smbus2.SMBus(1)
     hwAdd = DEVICE_ADDRESS + stack
     try:
         oldVal = __check(bus, hwAdd)
@@ -110,7 +110,7 @@ def get(stack, relay):
         raise ValueError('Invalid relay number!')
     if relay > 8:
         raise ValueError('Invalid relay number!')
-    bus = smbus.SMBus(1)
+    bus = smbus2.SMBus(1)
     hwAdd = DEVICE_ADDRESS + stack
     try:
         val = __check(bus, hwAdd)
@@ -135,7 +135,7 @@ def get_all(stack):
     if stack < 0 or stack > 7:
         raise ValueError('Invalid stack level!')
     stack = 0x07 ^ stack
-    bus = smbus.SMBus(1)
+    bus = smbus2.SMBus(1)
     hwAdd = DEVICE_ADDRESS + stack
     try:
         val = __check(bus, hwAdd)
