@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
     name='SM8relind',
     packages=setuptools.find_packages(),
-    version='1.0.2',
+    version='1.0.3',
     license='MIT',
     description='Library to control Sequent Microsystems 8relind Card',
     author='Sequent Microsystems',

@@ -33,8 +33,8 @@ def __IOToRelay(iov):
 def __check(bus, add):
     cfg = bus.read_byte_data(add, RELAY8_CFG_REG_ADD)
     if cfg != 0:
-        bus.write_byte_data(add, RELAY8_CFG_REG_ADD, 0)
         bus.write_byte_data(add, RELAY8_OUTPORT_REG_ADD, 0)
+        bus.write_byte_data(add, RELAY8_CFG_REG_ADD, 0)  
     return bus.read_byte_data(add, RELAY8_INPORT_REG_ADD)
 
 
