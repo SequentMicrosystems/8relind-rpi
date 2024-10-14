@@ -19,7 +19,7 @@
 
 #define VERSION_BASE	(int)1
 #define VERSION_MAJOR	(int)1
-#define VERSION_MINOR	(int)0
+#define VERSION_MINOR	(int)1
 
 #define UNUSED(X) (void)X      /* To avoid gcc/g++ warnings */
 #define CMD_ARRAY_SIZE	7
@@ -305,18 +305,19 @@ int doBoardInit(int stack)
 	}
 	if (buff[0] != 0) //non initialized I/O Expander
 	{
-		// make all I/O pins output
-		buff[0] = 0;
-		if (0 > i2cMem8Write(dev, RELAY8_CFG_REG_ADD, buff, 1))
-		{
-			return ERROR;
-		}
 		// put all pins in 0-logic state
 		buff[0] = 0;
 		if (0 > i2cMem8Write(dev, RELAY8_OUTPORT_REG_ADD, buff, 1))
 		{
 			return ERROR;
 		}
+		// make all I/O pins output
+		buff[0] = 0;
+		if (0 > i2cMem8Write(dev, RELAY8_CFG_REG_ADD, buff, 1))
+		{
+			return ERROR;
+		}
+
 	}
 
 	return dev;
