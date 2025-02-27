@@ -55,4 +55,4 @@ dkms.conf
 
 /python/build/
 /python/dist/
-/python/SM8relind.egg-info/
+/python/*.egg-info/
