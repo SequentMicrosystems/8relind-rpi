@@ -16,13 +16,14 @@
 #include "relay.h"
 #include "comm.h"
 #include "thread.h"
+#include "wdt.h"
 
 #define VERSION_BASE	(int)1
-#define VERSION_MAJOR	(int)1
-#define VERSION_MINOR	(int)1
+#define VERSION_MAJOR	(int)2
+#define VERSION_MINOR	(int)0
 
 #define UNUSED(X) (void)X      /* To avoid gcc/g++ warnings */
-#define CMD_ARRAY_SIZE	7
+#define CMD_ARRAY_SIZE	64
 
 const u8 relayMaskRemap[8] =
 {
@@ -49,85 +50,126 @@ int relayChSet(int dev, u8 channel, OutStateEnumType state);
 int relayChGet(int dev, u8 channel, OutStateEnumType* state);
 u8 relayToIO(u8 relay);
 u8 IOToRelay(u8 io);
-
-static void doHelp(int argc, char *argv[]);
+int cfg485Set(int dev, u8 mode, u32 baud, u8 stopB, u8 parity, u8 add);
+int cfg485Get(int dev);
+static int doHelp(int argc, char *argv[]);
 const CliCmdType CMD_HELP =
 	{
 		"-h",
 		1,
 		&doHelp,
-		"\t-h          Display the list of command options or one command option details\n",
-		"\tUsage:      8relind -h    Display command options list\n",
-		"\tUsage:      8relind -h <param>   Display help for <param> command option\n",
-		"\tExample:    8relind -h write    Display help for \"write\" command option\n"};
+		"  -h           Display the list of command options or one command option details\n",
+		"  Usage:       8relind -h    Display command options list\n",
+		"  Usage:       8relind -h <param>   Display help for <param> command option\n",
+		"  Example:     8relind -h write    Display help for \"write\" command option\n"};
 
-static void doVersion(int argc, char *argv[]);
+static int doVersion(int argc, char *argv[]);
 const CliCmdType CMD_VERSION =
-{
-	"-v",
-	1,
-	&doVersion,
-	"\t-v              Display the version number\n",
-	"\tUsage:          8relind -v\n",
-	"",
-	"\tExample:        8relind -v  Display the version number\n"};
+	{
+		"-v",
+		1,
+		&doVersion,
+		"  -v            Display the version number\n",
+		"  Usage:       8relind -v\n",
+		"",
+		" Example:      8relind -v  Display the version number\n"};
 
-static void doWarranty(int argc, char* argv[]);
+static int doWarranty(int argc, char* argv[]);
 const CliCmdType CMD_WAR =
-{
-	"-warranty",
-	1,
-	&doWarranty,
-	"\t-warranty       Display the warranty\n",
-	"\tUsage:          8relind -warranty\n",
-	"",
-	"\tExample:        8relind -warranty  Display the warranty text\n"};
+	{
+		"-warranty",
+		1,
+		&doWarranty,
+		"  -warranty    Display the warranty\n",
+		"  Usage:       8relind -warranty\n",
+		"",
+		"  Example:     8relind -warranty  Display the warranty text\n"};
 
-static void doList(int argc, char *argv[]);
+static int doList(int argc, char *argv[]);
 const CliCmdType CMD_LIST =
 	{
 		"-list",
 		1,
 		&doList,
-		"\t-list:       List all 8relind boards connected,\n\treturn       nr of boards and stack level for every board\n",
-		"\tUsage:       8relind -list\n",
+		"  -list:      	List all 8relind boards connected,\n return       nr of boards and stack level for every board\n",
+		"  Usage:       8relind -list\n",
 		"",
-		"\tExample:     8relind -list display: 1,0 \n"};
+		"  Example:     8relind -list display: 1,0 \n"};
 
-static void doRelayWrite(int argc, char *argv[]);
+static int doRelayWrite(int argc, char *argv[]);
 const CliCmdType CMD_WRITE =
-{
-	"write",
-	2,
-	&doRelayWrite,
-	"\twrite:       Set relays On/Off\n",
-	"\tUsage:       8relind <id> write <channel> <on/off>\n",
-	"\tUsage:       8relind <id> write <value>\n",
-	"\tExample:     8relind 0 write 2 On; Set Relay #2 on Board #0 On\n"};
+	{
+		"write",
+		2,
+		&doRelayWrite,
+		"  write:       Set relays On/Off\n",
+		"  Usage:       8relind <id> write <channel> <on/off>\n",
+		"  Usage:       8relind <id> write <value>\n",
+		"  Example:     8relind 0 write 2 On; Set Relay #2 on Board #0 On\n"};
 
-static void doRelayRead(int argc, char *argv[]);
+static int doRelayRead(int argc, char *argv[]);
 const CliCmdType CMD_READ =
-{
-	"read",
-	2,
-	&doRelayRead,
-	"\tread:        Read relays status\n",
-	"\tUsage:       8relind <id> read <channel>\n",
-	"\tUsage:       8relind <id> read\n",
-	"\tExample:     8relind 0 read 2; Read Status of Relay #2 on Board #0\n"};
+	{
+		"read",
+		2,
+		&doRelayRead,
+		"  read:        Read relays status\n",
+		"  Usage:       8relind <id> read <channel>\n",
+		"  Usage:       8relind <id> read\n",
+		"  Example:     8relind 0 read 2; Read Status of Relay #2 on Board #0\n"};
 
-static void doTest(int argc, char* argv[]);
+static int doTest(int argc, char* argv[]);
 const CliCmdType CMD_TEST =
-{
-	"test",
-	2,
-	&doTest,
-	"\ttest:        Turn ON and OFF the relays until press a key\n",
-	"",
-	"\tUsage:       8relind <id> test\n",
-	"\tExample:     8relind 0 test\n"};
+	{
+		"test",
+		2,
+		&doTest,
+		"  test:        Turn ON and OFF the relays until press a key\n",
+		"",
+		"  Usage:       8relind <id> test\n",
+		"  Example:     8relind 0 test\n"};
+
+
+static int doBoard1(int argc, char* argv[]);
+const CliCmdType CMD_BOARD =
+	{
+		"board", 
+		2, 
+		&doBoard1,
+		"  board:       Display board firmware version and status\n", 
+		"  Usage:       8relind <id> board\n",
+		"",
+		"  Example:     8relind 0 board\n"};
+
+int doRs485Write(int argc, char *argv[]);
+const CliCmdType CMD_RS485_WRITE =
+	{
+		"cfg485wr", 2, &doRs485Write,
+		"  cfg485wr:    Write the RS485 communication settings\n",
+		"  Usage:       8relind <id> cfg485wr <mode> <baudrate> <stopBits> <parity> <slaveAddr>\n",
+		"",
+		"  Example:		 8relind 0 cfg485wr 1 9600 1 0 1; Write the RS485 settings on Board #0 \n   (mode = Modbus RTU; baudrate = 9600 bps; stop bits one; parity none; modbus slave address = 1)\n"};
+
+int doRs485Read(int argc, char *argv[]);
+const CliCmdType CMD_RS485_READ =
+	{"cfg485rd", 2, &doRs485Read,
+		"  cfg485rd:    Read the RS485 communication settings\n",
+		"  Usage:       8relind <id> cfg485rd\n", "",
+		"  Example:		8relind 0 cfg485rd; Read the RS485 settings on Board #0\n"};
 
 CliCmdType gCmdArray[CMD_ARRAY_SIZE];
+
+void doUsage(void)
+{
+	int i = 0;
+	for (i = 0; i < CMD_ARRAY_SIZE; i++)
+	{
+		if (gCmdArray[i].usage1 != NULL)
+		{
+			printf("%s", gCmdArray[i].usage1);
+		}
+	}
+}
 
 char *usage = "Usage:	 8relind -h <command>\n"
 	"         8relind -v\n"
@@ -270,6 +312,66 @@ int relayGet(int dev, int* val)
 	*val = IOToRelay(buff[0]);
 	return OK;
 }
+int cfg485Set(int dev, u8 mode, u32 baud, u8 stopB, u8 parity, u8 add)
+{
+	ModbusSetingsType settings;
+	u8 buff[5];
+
+	if (baud > 921600 || baud < 1200)
+	{
+		printf("Invalid RS485 Baudrate [1200, 921600]!\n");
+		return ERROR;
+	}
+	if (mode > 1)
+	{
+		printf("Invalid RS485 mode : 0 = disable, 1= Modbus RTU (Slave)!\n");
+		return ERROR;
+	}
+	if (stopB < 1 || stopB > 2)
+	{
+		printf("Invalid RS485 stop bits [1, 2]!\n");
+		return ERROR;
+	}
+	if (parity > 2)
+	{
+		printf("Invalid RS485 parity 0 = none; 1 = even; 2 = odd! \n");
+		return ERROR;
+	}
+	if (add < 1)
+	{
+		printf("Invalid MODBUS device address: [1, 255]!\n");
+	}
+	settings.mbBaud = baud;
+	settings.mbType = mode;
+	settings.mbParity = parity;
+	settings.mbStopB = stopB;
+	settings.add = add;
+
+	memcpy(buff, &settings, sizeof(ModbusSetingsType));
+	if (OK != i2cMem8Write(dev, I2C_MODBUS_SETINGS_ADD, buff, 5))
+	{
+		printf("Fail to write RS485 settings!\n");
+		return ERROR;
+	}
+	return OK;
+}
+
+int cfg485Get(int dev)
+{
+	ModbusSetingsType settings;
+	u8 buff[5];
+
+	if (OK != i2cMem8Read(dev, I2C_MODBUS_SETINGS_ADD, buff, 5))
+	{
+		printf("Fail to read RS485 settings!\n");
+		return ERROR;
+	}
+	memcpy(&settings, buff, sizeof(ModbusSetingsType));
+	printf("<mode> <baudrate> <stopbits> <parity> <add> %d %d %d %d %d\n",
+		(int)settings.mbType, (int)settings.mbBaud, (int)settings.mbStopB,
+		(int)settings.mbParity, (int)settings.add);
+	return OK;
+}
 
 int doBoardInit(int stack)
 {
@@ -346,7 +448,7 @@ int boardCheck(int hwAdd)
  *	Write coresponding relay channel
  **************************************************************************************
  */
-static void doRelayWrite(int argc, char *argv[])
+static int doRelayWrite(int argc, char *argv[])
 {
 	int pin = 0;
 	OutStateEnumType state = STATE_COUNT;
@@ -360,13 +462,13 @@ static void doRelayWrite(int argc, char *argv[])
 	{
 		printf("Usage: 8relind <id> write <relay number> <on/off> \n");
 		printf("Usage: 8relind <id> write <relay reg value> \n");
-		exit(1);
+		return ERROR;
 	}
 
 	dev = doBoardInit(atoi(argv[1]));
 	if (dev <= 0)
 	{
-		exit(1);
+		return ERROR;
 	}
 	if (argc == 5)
 	{
@@ -374,7 +476,7 @@ static void doRelayWrite(int argc, char *argv[])
 		if ( (pin < CHANNEL_NR_MIN) || (pin > RELAY_CH_NR_MAX))
 		{
 			printf("Relay number value out of range\n");
-			exit(1);
+			return ERROR;
 		}
 
 		/**/if ( (strcasecmp(argv[4], "up") == 0)
@@ -388,7 +490,7 @@ static void doRelayWrite(int argc, char *argv[])
 			if ( (atoi(argv[4]) >= STATE_COUNT) || (atoi(argv[4]) < 0))
 			{
 				printf("Invalid relay state!\n");
-				exit(1);
+				return ERROR;
 			}
 			state = (OutStateEnumType)atoi(argv[4]);
 		}
@@ -400,12 +502,12 @@ static void doRelayWrite(int argc, char *argv[])
 			if (OK != relayChSet(dev, pin, state))
 			{
 				printf("Fail to write relay\n");
-				exit(1);
+				return ERROR;
 			}
 			if (OK != relayChGet(dev, pin, &stateR))
 			{
 				printf("Fail to read relay\n");
-				exit(1);
+				return ERROR;
 			}
 			retry--;
 		}
@@ -418,7 +520,7 @@ static void doRelayWrite(int argc, char *argv[])
 		if (retry == 0)
 		{
 			printf("Fail to write relay\n");
-			exit(1);
+			return ERROR;
 		}
 	}
 	else
@@ -427,7 +529,7 @@ static void doRelayWrite(int argc, char *argv[])
 		if (val < 0 || val > 255)
 		{
 			printf("Invalid relay value\n");
-			exit(1);
+			return ERROR;
 		}
 
 		retry = RETRY_TIMES;
@@ -438,20 +540,22 @@ static void doRelayWrite(int argc, char *argv[])
 			if (OK != relaySet(dev, val))
 			{
 				printf("Fail to write relay!\n");
-				exit(1);
+				return ERROR;
 			}
 			if (OK != relayGet(dev, &valR))
 			{
 				printf("Fail to read relay!\n");
-				exit(1);
+				return ERROR;
 			}
+			retry--;
 		}
 		if (retry == 0)
 		{
 			printf("Fail to write relay!\n");
-			exit(1);
+			return ERROR;
 		}
 	}
+	return OK;
 }
 
 /*
@@ -459,7 +563,7 @@ static void doRelayWrite(int argc, char *argv[])
  *	Read relay state
  ******************************************************************************************
  */
-static void doRelayRead(int argc, char *argv[])
+static int doRelayRead(int argc, char *argv[])
 {
 	int pin = 0;
 	int val = 0;
@@ -469,7 +573,7 @@ static void doRelayRead(int argc, char *argv[])
 	dev = doBoardInit(atoi(argv[1]));
 	if (dev <= 0)
 	{
-		exit(1);
+		return ERROR;
 	}
 
 	if (argc == 4)
@@ -478,13 +582,13 @@ static void doRelayRead(int argc, char *argv[])
 		if ( (pin < CHANNEL_NR_MIN) || (pin > RELAY_CH_NR_MAX))
 		{
 			printf("Relay number value out of range!\n");
-			exit(1);
+			return ERROR;
 		}
 
 		if (OK != relayChGet(dev, pin, &state))
 		{
 			printf("Fail to read!\n");
-			exit(1);
+			return ERROR;
 		}
 		if (state != 0)
 		{
@@ -500,18 +604,19 @@ static void doRelayRead(int argc, char *argv[])
 		if (OK != relayGet(dev, &val))
 		{
 			printf("Fail to read!\n");
-			exit(1);
+			return ERROR;
 		}
 		printf("%d\n", val);
 	}
 	else
 	{
 		printf("Usage: %s read relay value\n", argv[0]);
-		exit(1);
+		return ERROR;
 	}
+	return OK;
 }
 
-static void doHelp(int argc, char *argv[])
+static int doHelp(int argc, char *argv[])
 {
 	int i = 0;
 	if (argc == 3)
@@ -531,16 +636,19 @@ static void doHelp(int argc, char *argv[])
 		if (CMD_ARRAY_SIZE == i)
 		{
 			printf("Option \"%s\" not found\n", argv[2]);
-			printf("%s: %s\n", argv[0], usage);
+			
+			doUsage();
 		}
 	}
 	else
 	{
-		printf("%s: %s\n", argv[0], usage);
+		
+		doUsage();
 	}
+	return OK;
 }
 
-static void doVersion(int argc, char *argv[])
+static int doVersion(int argc, char *argv[])
 {
 	UNUSED(argc);
 	UNUSED(argv);
@@ -548,10 +656,10 @@ static void doVersion(int argc, char *argv[])
 	VERSION_BASE, VERSION_MAJOR, VERSION_MINOR);
 	printf("\nThis is free software with ABSOLUTELY NO WARRANTY.\n");
 	printf("For details type: 8relind -warranty\n");
-
+	return OK;	
 }
 
-static void doList(int argc, char *argv[])
+static int doList(int argc, char *argv[])
 {
 	int ids[8];
 	int i;
@@ -587,12 +695,13 @@ static void doList(int argc, char *argv[])
 		printf(" %d", ids[cnt]);
 	}
 	printf("\n");
+	return OK;
 }
 
 /* 
  * Self test for production
  */
-static void doTest(int argc, char* argv[])
+static int doTest(int argc, char* argv[])
 {
 	int dev = 0;
 	int i = 0;
@@ -615,7 +724,7 @@ static void doTest(int argc, char* argv[])
 	dev = doBoardInit(atoi(argv[1]));
 	if (dev <= 0)
 	{
-		exit(1);
+		return -1;
 	}
 	if (argc == 4)
 	{
@@ -623,7 +732,7 @@ static void doTest(int argc, char* argv[])
 		if (!file)
 		{
 			printf("Fail to open result file\n");
-			//return -1;
+			return -1;
 		}
 	}
 //relay test****************************
@@ -664,7 +773,7 @@ static void doTest(int argc, char* argv[])
 					printf("Fail to write relay\n");
 					if (file)
 						fclose(file);
-					exit(1);
+					return -1;
 				}
 				busyWait(150);
 			}
@@ -695,7 +804,7 @@ static void doTest(int argc, char* argv[])
 					printf("Fail to write relay!\n");
 					if (file)
 						fclose(file);
-					exit(1);
+					return -1	;
 				}
 				busyWait(150);
 			}
@@ -728,11 +837,103 @@ static void doTest(int argc, char* argv[])
 		fclose(file);
 	}
 	relaySet(dev, 0);
+	return OK;
 }
 
-static void doWarranty(int argc UNU, char* argv[] UNU)
+static int doWarranty(int argc UNU, char* argv[] UNU)
 {
 	printf("%s\n", warranty);
+	return OK;
+}
+int doRs485Read(int argc, char *argv[])
+{
+	int dev = 0;
+
+	dev = doBoardInit(atoi(argv[1]));
+	if (dev <= 0)
+	{
+		return ERROR;
+	}
+
+	if (argc == 3)
+	{
+		if (OK != cfg485Get(dev))
+		{
+			return ERROR;
+		}
+	}
+	else
+	{
+		return ARG_CNT_ERR;
+	}
+	return OK;
+}
+static int doBoard1(int argc, char *argv[])
+{
+	int dev = 0;
+	u8 buff[3];
+	u8 revMin = 0;
+	u8 revMaj = 0;
+	UNUSED(argc);
+
+
+	dev = doBoardInit(atoi(argv[1]));
+	if (dev <= 0)
+	{
+		return (FAIL);
+	}
+	if (OK != i2cMem8Read(dev, I2C_MEM_REVISION_MAJOR_ADD, buff, 2))
+	{
+		printf("Fail to read!\n");
+		return ERROR;
+	}
+	revMaj = buff[0];
+	revMin = buff[1];
+	if (OK != i2cMem8Read(dev, I2C_MEM_DIAG_3V3_MV_ADD, buff, 3))
+	{
+		printf("Fail to read!\n");
+		return ERROR;
+	}
+	printf(
+		"8-RELAY card found firmware version %d.%02d CPU voltage %0.3fV temperature %d'C\n",
+		(int)revMaj, (int)revMin,
+		(int) ((int) ( (buff[1] << 8) | buff[0])) / 1000.0, (int)buff[2]);
+	return OK;
+}
+
+
+int doRs485Write(int argc, char *argv[])
+{
+	int dev = 0;
+	u8 mode = 0;
+	u32 baud = 1200;
+	u8 stopB = 1;
+	u8 parity = 0;
+	u8 add = 0;
+
+	dev = doBoardInit(atoi(argv[1]));
+	if (dev <= 0)
+	{
+		return ERROR;
+	}
+	if (argc == 8)
+	{
+		mode = 0xff & atoi(argv[3]);
+		baud = atoi(argv[4]);
+		stopB = 0xff & atoi(argv[5]);
+		parity = 0xff & atoi(argv[6]);
+		add = 0xff & atoi(argv[7]);
+		if (OK != cfg485Set(dev, mode, baud, stopB, parity, add))
+		{
+			return ERROR;
+		}
+		printf("done\n");
+	}
+	else
+	{
+		return ARG_CNT_ERR;
+	}
+	return OK;
 }
 
 static void cliInit(void)
@@ -742,6 +943,8 @@ static void cliInit(void)
 	memset(gCmdArray, 0, sizeof(CliCmdType) * CMD_ARRAY_SIZE);
 
 	memcpy(&gCmdArray[i], &CMD_HELP, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_VERSION, sizeof(CliCmdType));
 	i++;
 	memcpy(&gCmdArray[i], &CMD_WAR, sizeof(CliCmdType));
 	i++;
@@ -753,20 +956,43 @@ static void cliInit(void)
 	i++;
 	memcpy(&gCmdArray[i], &CMD_TEST, sizeof(CliCmdType));
 	i++;
-	memcpy(&gCmdArray[i], &CMD_VERSION, sizeof(CliCmdType));
-
+	memcpy(&gCmdArray[i], &CMD_RS485_READ, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_RS485_WRITE, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_BOARD, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_WDT_RELOAD, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_WDT_SET_PERIOD, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_WDT_GET_PERIOD, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_WDT_SET_INIT_PERIOD, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_WDT_GET_INIT_PERIOD, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_WDT_SET_OFF_PERIOD, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_WDT_GET_OFF_PERIOD, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_WDT_GET_RESET_COUNT, sizeof(CliCmdType));
+	i++;
+	memcpy(&gCmdArray[i], &CMD_WDT_CLR_RESET_COUNT, sizeof(CliCmdType));
+	i++;
 }
 
 int main(int argc, char *argv[])
 {
 	int i = 0;
+	int ret = 0;
 
 	cliInit();
 
 	if (argc == 1)
 	{
-		printf("%s\n", usage);
-		return 1;
+		doUsage();
+		return ERROR;
 	}
 	for (i = 0; i < CMD_ARRAY_SIZE; i++)
 	{
@@ -774,13 +1000,13 @@ int main(int argc, char *argv[])
 		{
 			if (strcasecmp(argv[gCmdArray[i].namePos], gCmdArray[i].name) == 0)
 			{
-				gCmdArray[i].pFunc(argc, argv);
-				return 0;
+				ret = gCmdArray[i].pFunc(argc, argv);
+				return ret;
 			}
 		}
 	}
 	printf("Invalid command option\n");
-	printf("%s\n", usage);
+	doUsage();
 
-	return 0;
+	return -1;
 }
