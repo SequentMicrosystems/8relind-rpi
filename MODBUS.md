@@ -30,3 +30,22 @@ Access level: Read/Write, Size: 1 bit
 | Device function | Register Address | Modbus Address | Description |
 | --- | --- | --- | --- |
 |   RELAY1 | 0001 | 0x00 | Relay #1 control |
+|   RELAY2 | 0002 | 0x00 | Relay #1 control |
+|   RELAY3 | 0003 | 0x00 | Relay #1 control |
+|   RELAY4 | 0004 | 0x00 | Relay #1 control |
+|   RELAY5 | 0005 | 0x00 | Relay #1 control |
+|   RELAY6 | 0006 | 0x00 | Relay #1 control |
+|   RELAY7 | 0007 | 0x00 | Relay #1 control |
+|   RELAY8 | 0008 | 0x00 | Relay #1 control |
+
+
+## Function codes implemented
+
+* Read Coils (0x01)
+* Read Discrete Inputs (0x02)
+* Read Holding Registers (0x03)
+* Read Input Registers (0x04)
+* Write Single Coil (0x05)
+* Write Single Register (0x06)
+* Write Multiple Coils (0x0f)
+* Write Multiple Registers (0x10)
