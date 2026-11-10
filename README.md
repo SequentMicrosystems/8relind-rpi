@@ -1,8 +1,10 @@
+# 8relind-rpi
+
 [![relay8-rpi](readmeres/sequent.jpg)](https://www.sequentmicrosystems.com)
 
-<h2><a href="https://sequentmicrosystems.com/products/eight-relays-stackable-card-for-raspberry-pi">8-RELAYS Stackable Card for Raspberry Pi</a> by <a href="https://www.sequentmicrosystems.com">Sequent Microsystems</a></h2>
-
 [![relay8-rpi](readmeres/8-RELIND.jpg)](https://sequentmicrosystems.com/products/eight-relays-stackable-card-for-raspberry-pi)
+
+<h2><a href="https://sequentmicrosystems.com/products/eight-relays-stackable-card-for-raspberry-pi">8-RELAYS Stackable Card for Raspberry Pi</a> by <a href="https://www.sequentmicrosystems.com">Sequent Microsystems</a></h2>
 
 The command line interface (CLI) included in this repository gives you full access to every feature of the card. It is the quickest way to get started and is all you need to operate the card.
 
