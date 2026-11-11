@@ -18,7 +18,7 @@ For a firmware update, please follow the instructions in the link below:
 
 - [Firmware update instructions](https://github.com/SequentMicrosystems/8relind-rpi/blob/main/update/README.md)
   
-*Note: This repository contains the command line and python functions to control Ver. 4 of the card. If you use Ver. 3.x, download from [here](https://github.com/SequentMicrosystems/8relay-rpi). If you have Ver. 1-2 with screw-type connectors, download from [here](https://github.com/SequentMicrosystems/relay8-rpi).*
+*Note: This repository contains the command line and Python functions to control Ver. 4 of the card. If you use Ver. 3.x, download from [here](https://github.com/SequentMicrosystems/8relay-rpi). If you have Ver. 1-2 with screw-type connectors, download from [here](https://github.com/SequentMicrosystems/relay8-rpi).*
 
 ---
 
@@ -72,22 +72,22 @@ Install the CLI with:
 
 ```bash
 cd
-git clone https://github.com/SequentMicrosystems/megaind-rpi.git
-cd megaind-rpi/
+git clone https://github.com/SequentMicrosystems/8relind-rpi.git
+cd 8relind-rpi/
 sudo make install
 ```
 
 To update to the latest version:
 
 ```bash
-cd ~/megaind-rpi/  
+cd ~/8relind-rpi/  
 git pull
 sudo make install
 ```  
 
 ## Usage
 
-Now you can access all the functions of the [Eight Relays 4A/120V 8-Layer Stackable HAT for Raspberry Pi](https://sequentmicrosystems.com/products/eight-relays-stackable-card-for-raspberry-pi) through the command "8relind". Use -h option for help:
+You can now access all the functions of the [Eight Relays 4A/120V 8-Layer Stackable HAT for Raspberry Pi](https://sequentmicrosystems.com/products/eight-relays-stackable-card-for-raspberry-pi) through the "8relind" command. Use the -h option for help:
 
 ```bash
 8relind -h
