@@ -12,6 +12,7 @@ If you would rather use a different platform, you can access the same functional
 - [Python Library](https://github.com/SequentMicrosystems/8relind-rpi/tree/master/python)
 - [Node-RED example based on "exec" node](https://github.com/SequentMicrosystems/8relind-rpi/tree/master/node-red)
 - [Node-RED "8relind" node](https://github.com/SequentMicrosystems/8relind-rpi/tree/master/node-red-contrib-sm-8relind)
+- [Modbus RTU slave](https://github.com/SequentMicrosystems/8relind-rpi/blob/master/MODBUS.md)
 
 *Note: This repository contains the command line and python functions to control Ver. 4 of the card. If you use Ver. 3.x, download from [here](https://github.com/SequentMicrosystems/8relay-rpi). If you have Ver. 1-2 with screw-type connectors, download from [here](https://github.com/SequentMicrosystems/relay8-rpi).*
 
