@@ -40,9 +40,9 @@ sudo raspi-config
 
 Follow the steps in the 3 screenshots below to enable I2C communication. After that, reboot the Raspberry Pi for the changes to take effect.
 
-![Enable I2C](./res/i2c/i2c_step1.png)
-![Enable I2C](./res/i2c/i2c_step2.png)
-![Enable I2C](./res/i2c/i2c_step3.png)
+![Enable I2C](https://github.com/SequentMicrosystems/megaind-rpi/blob/master/res/i2c/i2c_step1.png)
+![Enable I2C](https://github.com/SequentMicrosystems/megaind-rpi/blob/master/res/i2c/i2c_step2.png)
+![Enable I2C](https://github.com/SequentMicrosystems/megaind-rpi/blob/master/res/i2c/i2c_step3.png)
 
 Reboot the Raspberry Pi:
 
