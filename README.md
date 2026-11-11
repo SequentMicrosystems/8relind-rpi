@@ -14,6 +14,10 @@ If you would rather use a different platform, you can access the same functional
 - [Node-RED "8relind" node](https://github.com/SequentMicrosystems/8relind-rpi/tree/master/node-red-contrib-sm-8relind)
 - [Modbus RTU slave](https://github.com/SequentMicrosystems/8relind-rpi/blob/master/MODBUS.md)
 
+For a firmware update, please follow the instructions in the link below:
+
+- [Firmware update instructions](https://github.com/SequentMicrosystems/8relind-rpi/blob/main/update/README.md)
+  
 *Note: This repository contains the command line and python functions to control Ver. 4 of the card. If you use Ver. 3.x, download from [here](https://github.com/SequentMicrosystems/8relay-rpi). If you have Ver. 1-2 with screw-type connectors, download from [here](https://github.com/SequentMicrosystems/relay8-rpi).*
 
 ---
@@ -62,10 +66,49 @@ sudo apt install git build-essential
 
 </details>
 
-### 1. Enable I2C communication
-This only needs to be done once on each Raspberry Pi.
+## Installation
 
-On Raspberry Pi OS, install `raspi-config` first:
+Install the CLI with:
+
 ```bash
-sudo apt update
-sudo apt install raspi-config
+cd
+git clone https://github.com/SequentMicrosystems/megaind-rpi.git
+cd megaind-rpi/
+sudo make install
+```
+
+To update to the latest version:
+
+```bash
+cd ~/megaind-rpi/  
+git pull
+sudo make install
+```  
+
+## Usage
+
+Now you can access all the functions of the [Eight Relays 4A/120V 8-Layer Stackable HAT for Raspberry Pi](https://sequentmicrosystems.com/products/eight-relays-stackable-card-for-raspberry-pi) through the command "8relind". Use -h option for help:
+
+```bash
+8relind -h
+```
+
+For more detailed help on a specific function, use the -h option after the function name. For example:
+
+```bash
+8relind -h read
+```
+
+Example output:
+
+```txt
+8relind -h read
+```
+Outputs:
+
+```txt
+read:        Read relays status
+Usage:       8relind <id> read <channel>
+Usage:       8relind <id> read
+Example:     8relind 0 read 2; Read Status of Relay #2 on Board #0
+```
