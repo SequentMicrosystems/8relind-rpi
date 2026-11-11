@@ -20,6 +20,48 @@ If you would rather use a different platform, you can access the same functional
 
 ## Prerequisites
 
+<details>
+<summary>1. Enable I2C communication</summary>
+
+This only needs to be done once on each Raspberry Pi.
+
+On Raspberry Pi OS, install `raspi-config` first:
+
+```bash
+sudo apt update
+sudo apt install raspi-config
+```
+
+Then run:
+
+```bash
+sudo raspi-config
+```
+
+Follow the steps in the 3 screenshots below to enable I2C communication. After that, reboot the Raspberry Pi for the changes to take effect.
+
+![Enable I2C](./res/i2c/i2c_step1.png)
+![Enable I2C](./res/i2c/i2c_step2.png)
+![Enable I2C](./res/i2c/i2c_step3.png)
+
+Reboot the Raspberry Pi:
+
+```bash
+sudo reboot
+```
+
+</details>
+
+<details>
+<summary>2. Install git and build-essential packages</summary>
+
+```bash
+sudo apt update
+sudo apt install git build-essential
+```
+
+</details>
+
 ### 1. Enable I2C communication
 This only needs to be done once on each Raspberry Pi.
 
