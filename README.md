@@ -13,6 +13,8 @@ If you would rather use a different platform, you can access the same functional
 - [Node-RED example based on "exec" node](https://github.com/SequentMicrosystems/8relind-rpi/tree/master/node-red)
 - [Node-RED "8relind" node](https://github.com/SequentMicrosystems/8relind-rpi/tree/master/node-red-contrib-sm-8relind)
 - [Modbus RTU slave](https://github.com/SequentMicrosystems/8relind-rpi/blob/master/MODBUS.md)
+- [Home Assistant Integration](https://github.com/SequentMicrosystems/SM8relind-ha)
+- [Arduino Library](https://github.com/SequentMicrosystems/8relay-arduino)
 
 For a firmware update, please follow the instructions in the link below:
 
